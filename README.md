@@ -4,6 +4,7 @@
 The definition provides type definitions for common function of executor APIs. Also (partially) defines types for Synapse X V3, Wave, Synapse Z, Nihon.
 
 !🟥 ONLY WORKS WITH [Luau Language Server](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.luau-lsp) 🟥!
+
 **Contribution would be really appreciated!**
 
 
