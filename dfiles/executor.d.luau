@@ -4,7 +4,7 @@
 
 -- Universal Executor API Definition File
 -- Written by S.DOT
--- Version 1.0
+-- Version 1.1
 
 -- stolen from the Wave documentation, will add more functions from other executors
 -- now also stolen from the Syn V3 docs
@@ -43,12 +43,12 @@ type FilterGCOptions = {
 	Upvalues: {any}?,
 	IgnoreExecutor: boolean?,
 	Proto: ProtoProxy?,
-	Environment: {}?,
+	Environment: {[any]: any}?,
 	Hash: string?
 }
 type TrampolineCallStack = {
 	currentline: number?,
-	env: {}?,
+	env: {[any]: any}?,
 	source: string?,
 	name: string?,
 	numparams: number?,
@@ -58,7 +58,7 @@ type TrampolineCallStack = {
 type TrampolineThreadOptions = {
 	script: (LocalScript | ModuleScript)?,
 	identity: number?,
-	env: {}?,
+	env: {[any]: any}?,
 	thread: thread?
 }
 type ToastNotificationOptions = {
@@ -207,6 +207,7 @@ declare function getfilter(filter: FilterBase, originalFunc: ()->(), filterFunc:
 -- console functions
 
 declare function rconsoleprint(text: string): (nil)
+declare function rconsolewarn(text: string): (nil)
 declare function rconsoleinfo(text: string): (nil)
 declare function rconsoleerr(text: string): (nil)
 declare function rconsoleclear(): (nil)
@@ -217,10 +218,10 @@ declare function rconsoleclose(): (nil)
 
 -- environment functions
 
-declare function getgenv(): ({any})
-declare function getrenv(): ({any})
-declare function getsenv(script: LocalScript | ModuleScript): ({any})
-declare function gettenv(thread: thread): ({any})
+declare function getgenv(): ({[any]: any})
+declare function getrenv(): ({[any]: any})
+declare function getsenv(script: LocalScript | ModuleScript): ({[any]: any})
+declare function gettenv(thread: thread): ({[any]: any})
 declare function getreg(): ({(number | thread | {} | ()->())})
 declare function getgc(includeTables: boolean?): ({()->() | {} | Object})
 declare function filtergc(type: ()->() | Object | {}, options: FilterGCOptions, returnOne: boolean?): ({} | any | nil)
@@ -274,7 +275,7 @@ declare function hookproto(toHook: ProtoProxy, hook: ()->()): (nil)
 declare function hooksignal(signal: RBXScriptSignal, callback: ()->()): (nil)
 declare function hookmetamethod(object: Object | {}, metamethod: metamethod, hook: ()->(), argGuard: boolean?, filter: FilterBase?): (()->())
 
-declare function newcclosure(func: ()->(), name: string?): (()->())
+declare function newcclosure<Func>(func: Func & ()->(), name: string?): (Func & ()->())
 
 
 -- oth library
