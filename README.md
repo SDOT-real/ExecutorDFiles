@@ -5,11 +5,13 @@ The definition provides type definitions for common function of executor APIs. A
 
 !🟥 ONLY WORKS WITH [Luau Language Server](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.luau-lsp) 🟥!
 
+**Contribution would be really appreciated!**
+
 
 ## How to use?
-You can manually install everything or use my [installer script](./install.cmd).
+You can manually install the file or use my [installer script](./install.cmd).
 
-You need to copy the repository folder into your workspace folder and execute [install.cmd](./install.cmd) to successfully install the files!
+You need to copy the repository folder into your workspace folder and execute [install.bat](./install.bat) to install everything!
 
 *Be careful not to launch the script twice! It may break the installed setting!*
 
