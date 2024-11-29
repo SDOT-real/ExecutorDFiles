@@ -490,11 +490,16 @@ declare ExecutorFonts: {
 }
 
 declare class DrawEntry
-	function Destroy(self): ()
 	Visible: boolean
 	ZIndex: number
 	Transparency: number
+	Opacity: number
 	Color: Color3
+
+	function Remove(self): nil
+	function Destroy(self): nil
+	function MoveToFront(self): nil
+	function MoveToBack(self): nil
 end
 
 declare class Line extends DrawEntry
@@ -504,24 +509,29 @@ declare class Line extends DrawEntry
 	From: Vector2
 	To: Vector2
 end
+
 declare class Text extends DrawEntry
 	Text: string
 	Size: number
+	TextBounds: Vector2
 	Position: Vector2
 	Font: number
 	Centered: boolean
 	Outlined: boolean
 	OutlineColor: Color3
 end
+
 declare class Image extends DrawEntry
-	Data: Text
+	Data: string
 	Size: Vector2
+	ImageSize: Vector2	
 	Position: Vector2
 	Rounding: number
 	Centered: boolean
 	Outlined: boolean
 	OutlineColor: Color3
 end
+
 declare class Circle extends DrawEntry
 	Position: Vector2
 	Thickness: number
@@ -529,24 +539,27 @@ declare class Circle extends DrawEntry
 	Radius: number
 	Filled: boolean
 end
+
 declare class Square extends DrawEntry
-	Data: Text
 	Size: Vector2
 	Position: Vector2
 	Thickness: number
 	Filled: boolean
 end
+
 declare class Triangle extends DrawEntry
-	Data: Text
 	Position: Vector2
 	Thickness: number
 	PointA: Vector2
 	PointB: Vector2
 	PointC: Vector2
+	Point1: Vector2
+	Point2: Vector2
+	Point3: Vector2
 	Filled: boolean
 end
+
 declare class Quad extends DrawEntry
-	Data: Text
 	Position: Vector2
 	Thickness: number
 	PointA: Vector2
@@ -561,15 +574,23 @@ declare class Quad extends DrawEntry
 end
 
 declare Drawing: {
-	new: (type: "Circle" | "Square" | "Line" | "Text" | "Image" | "Quad" | "Triangle")->(DrawEntry),
-	Fonts: typeof(ExecutorFonts)
+	new: ((Type: "Line") -> Line) 
+		& ((Type: "Text") -> Text)
+		& ((Type: "Image") -> Image)
+		& ((Type: "Circle") -> Circle)
+		& ((Type: "Square") -> Square)
+		& ((Type: "Triangle") -> Triangle)
+		& ((Type: "Quad") -> Quad),
+	Fonts: typeof(ExecutorFonts),
+	fonts: typeof(ExecutorFonts),
+	Clear: () -> (nil),
+	clear: () -> (nil)
 }
 
 declare function cleardrawcache(): (nil)
 declare function getrenderproperty(object: DrawEntry, property: string): (any)
 declare function setrenderproperty(object: DrawEntry, property: string, value: any): (nil)
 declare function isrenderobj(object: any): (boolean)
-
 
 -- web library
 
