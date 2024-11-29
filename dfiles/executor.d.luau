@@ -605,8 +605,15 @@ declare websocket: {
 	connect: (url: string)->(Socket)
 }
 
+declare WebSocket: {
+	connect: (url: string)->(Socket)
+}
+
 declare function request(params: RequestParams): (RequestResponse)
 
+declare http: {
+	request: (params: RequestParams) -> (RequestResponse)
+}
 
 -- parallel library
 
