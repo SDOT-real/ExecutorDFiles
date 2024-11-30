@@ -11,7 +11,7 @@
 
 -- types
 
-type saveinstanceOptions = {
+export type saveinstanceOptions = {
 	Decompile: boolean?,
 	DecompileTimeout: number?,
 	DecompileIgnore: {string}?,
@@ -23,7 +23,7 @@ type saveinstanceOptions = {
 	IgnoreDefaultProps: boolean?,
 	IsolateStarterPlayer: boolean?
 }
-type getinfoReturn = {
+export type getinfoReturn = {
 	name: string,
 	short_src: string,
 	source: string,
@@ -32,7 +32,7 @@ type getinfoReturn = {
 	nups: number,
 	func: ()->()
 }
-type FilterGCOptions = {
+export type FilterGCOptions = {
 	Keys: {any}?,
 	Values: {any}?,
 	KeyValuePairs: {[any]: any}?,
@@ -46,7 +46,7 @@ type FilterGCOptions = {
 	Environment: {[any]: any}?,
 	Hash: string?
 }
-type TrampolineCallStack = {
+export type TrampolineCallStack = {
 	currentline: number?,
 	env: {[any]: any}?,
 	source: string?,
@@ -55,27 +55,27 @@ type TrampolineCallStack = {
 	is_vararg: boolean?,
 	func: ()->()?
 }
-type TrampolineThreadOptions = {
-	script: (LocalScript | ModuleScript)?,
+export type TrampolineThreadOptions = {
+	script: LuaSourceContainer?,
 	identity: number?,
 	env: {[any]: any}?,
 	thread: thread?
 }
-type ToastNotificationOptions = {
+export type ToastNotificationOptions = {
 	Type: number,
 	Duration: number?,
 	Title: string,
 	Content: string,
 	IconColor: Color3
 }
-type RequestParams = {
+export type RequestParams = {
 	Url: string,
 	Method: "GET" | "POST" | "HEAD" | "DELETE" | "PUT",
 	Headers: {},
 	Cookies: {},
 	Body: string?
 }
-type RequestResponse = {
+export type RequestResponse = {
 	Success: boolean,
 	StatusCode: number,
 	StatusMessage: string,
@@ -84,10 +84,8 @@ type RequestResponse = {
 	Body: string?
 }
 
-type LuaSourceContainer = LocalScript | ModuleScript | ProtoProxy | ()->()
 type metamethod = "__iter" | "__index" | "__newindex" | "__call" | "__call" | "__concat" | "__unm" | "__add" | "__sub" | "__mul" | "__div" | "__idiv" | "__mod" | "__pow" | "__tostring" | "__metatable" | "__lt" | "__le" | "__eq" | "__mode" | "__len" | "__namecall" | "__type"
 type constant = string | number | boolean
--- type booleanBinary = (0 | 1) -- eh, why i cant use numbers as literal types???
 
 
 -- classes
@@ -102,7 +100,7 @@ declare ToastType: {
 	Error: number,
 	Info: number
 }
-declare class ConnectionInformation
+declare class ConnectionProxy
 	Enabled: boolean
 	State: boolean
 	ForeignState: boolean
@@ -220,15 +218,15 @@ declare function rconsoleclose(): (nil)
 
 declare function getgenv(): ({[any]: any})
 declare function getrenv(): ({[any]: any})
-declare function getsenv(script: LocalScript | ModuleScript): ({[any]: any})
+declare function getsenv(script: LuaSourceContainer): ({[any]: any})
 declare function gettenv(thread: thread): ({[any]: any})
 declare function getreg(): ({(number | thread | {} | ()->())})
 declare function getgc(includeTables: boolean?): ({()->() | {} | Object})
-declare function filtergc(type: ()->() | Object | {}, options: FilterGCOptions, returnOne: boolean?): ({} | any | nil)
+declare function filtergc(type: ()->() | Object | {}, options: FilterGCOptions, returnOne: boolean?): (({} | any)?)
 
 declare function getinstances(): ({Instance})
 declare function getnilinstances(): ({Instance})
-declare function getscripts(): ({LocalScript | ModuleScript})
+declare function getscripts(): ({LuaSourceContainer})
 declare function getloadedmodules(): ({ModuleScript})
 declare function fireclickdetector(clickDetector: ClickDetector): (nil)
 declare function fireproximityprompt(proximityPrompt: ProximityPrompt): (nil)
@@ -270,7 +268,7 @@ declare restoreclosure: typeof(restorefunction)
 declare function restoreproto(toRestore: ProtoProxy): (nil)
 declare function restoresignal(signal: RBXScriptSignal): (nil)
 
-declare function hookfunction(toHook: ()->(), hook: ()->(), filter: FilterBase?): (()->())
+declare function hookfunction<Original>(toHook: ()->() & Original, hook: ()->(), filter: FilterBase?): (()->() & Original)
 declare function hookproto(toHook: ProtoProxy, hook: ()->()): (nil)
 declare function hooksignal(signal: RBXScriptSignal, callback: ()->()): (nil)
 declare function hookmetamethod(object: Object | {}, metamethod: metamethod, hook: ()->(), argGuard: boolean?, filter: FilterBase?): (()->())
@@ -357,16 +355,19 @@ declare function geteventmember(object: Object, eventName: string): (RBXScriptSi
 declare function checkcallstack(index: number): (boolean)
 declare function checkcaller(): (boolean)
 
-declare function isexecutorclosure(closure: ()->()): (boolean)
+declare function isexecutorclosure(closure: ()->() | ProtoProxy): (boolean)
 declare function isexecutorthread(thread: thread): (boolean)
-declare function islclosure(closure: ()->()): (boolean)
-declare function getcallingscript(): ((LocalScript | ModuleScript)?)
+declare function islclosure(closure: ()->() | ProtoProxy): (boolean)
+declare function getcallingscript(): (LuaSourceContainer?)
 
-declare function getscriptthread(script: LocalScript | ModuleScript): (thread)
-declare function getscriptclosure(script: LocalScript | ModuleScript): (()->())
-declare function getscripthash(script: LocalScript | ModuleScript): (string)
+declare function getscriptthread(script: LuaSourceContainer): (thread)
+declare function getscriptclosure(script: LuaSourceContainer): (()->())
+declare function getscripthash(script: LuaSourceContainer): (string)
 declare function getscriptbytecode(script: LuaSourceContainer): (string)
-declare function getscriptname(script: LocalScript | ModuleScript): (string)
+declare function getscriptname(script: LuaSourceContainer): (string)
+
+declare function getfunctionhash(target: ()->() | ProtoProxy): (string)
+declare function getfunctionbytecode(target: ()->() | ProtoProxy): (string)
 
 declare function decompile(target: LuaSourceContainer): (string)
 
@@ -397,7 +398,7 @@ declare function replicatesignal(signal: RBXScriptSignal, ...: any): (nil)
 declare function cansignalreplicate(signal: RBXScriptSignal): (boolean)
 declare function getsignalarguments(signal: RBXScriptSignal): ({string})
 
-declare function getconnections(signal: RBXScriptSignal): ({ConnectionInformation})
+declare function getconnections(signal: RBXScriptSignal): ({ConnectionProxy})
 
 
 -- math functions
@@ -459,7 +460,7 @@ declare bit: {
 
 -- debug library
 
-declare debug: typeof(debug) & {
+declare debug: {
 	getconstants: (target: ()->() | number | ProtoProxy)->({constant}),
 	getconstant: (target: ()->() | number | ProtoProxy, index: number)->(constant),
 	setconstant: (target: ()->() | number | ProtoProxy, index: number, value: constant)->(nil),
@@ -467,8 +468,8 @@ declare debug: typeof(debug) & {
 	getupvalue: (target: ()->() | number, index: number)->(any),
 	setupvalue: (target: ()->() | number, index: number, value: any)->(),
 	getprotos: (target: ()->() | number | ProtoProxy)->({ProtoProxy}),
-	getproto: (target: ()->() | number | ProtoProxy, index: number, getFromGc: boolean?)->(ProtoProxy | {()->()}),
-	setproto: (closure: ()->() | number | ProtoProxy, index: number, replacement: ()->())->(nil),
+	getproto: ((target: ()->() | number | ProtoProxy, index: number, getFromGc: true)->({()->()})) & ((target: ()->() | number | ProtoProxy, index: number, getFromGc: false?)->(ProtoProxy)),
+	setproto: (target: ()->() | number | ProtoProxy, index: number, replacement: ()->())->(nil),
 	getstack: (index: number)->({any}),
 	setstack: (level: number, index: number, value: any)->(nil),
 	getmetatable: typeof(getrawmetatable),
@@ -477,7 +478,7 @@ declare debug: typeof(debug) & {
 	getinfo: (closure: ()->())->(getinfoReturn),
 	validlevel: (level: number, thread: thread?)->(boolean),
 	getcallstack: (thread: thread?)->({()->()})
-}
+} & typeof(debug)
 
 
 -- drawing library
@@ -603,7 +604,7 @@ end
 declare function getactors(): ({Actor})
 declare function getactorstates(): ({LuaStateProxy})
 declare getactorthreads: typeof(getactorstates)
-declare function getluastate(target: LocalScript | ModuleScript | Actor): (LuaStateProxy)
+declare function getluastate(target: LuaSourceContainer | Actor): (LuaStateProxy)
 declare function getgamestate(): (LuaStateProxy)
 
 declare function run_on_actor(actor: Actor, code: string, ...: any): (boolean)
