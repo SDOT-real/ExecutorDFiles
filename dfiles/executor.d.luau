@@ -9,6 +9,14 @@
 -- stolen from the Wave documentation, will add more functions from other executors
 -- now also stolen from the Syn V3 docs
 
+-- here is a little format convention for this file:
+-- in case of non-declare functions (()->()):
+-- please keep no spaces between the arrow and the brackets
+-- if the function returns nothing, add nil
+-- keep returns/arguments inside brackets for readibility
+
+-- also please use typeof() for cloning wherever possible, thanks
+
 -- types
 
 export type saveinstanceOptions = {
@@ -575,17 +583,17 @@ declare class Quad extends DrawEntry
 end
 
 declare Drawing: {
-	new: ((Type: "Line") -> Line) 
-		& ((Type: "Text") -> Text)
-		& ((Type: "Image") -> Image)
-		& ((Type: "Circle") -> Circle)
-		& ((Type: "Square") -> Square)
-		& ((Type: "Triangle") -> Triangle)
-		& ((Type: "Quad") -> Quad),
+	new: ((Type: "Line")->(Line)) 
+		& ((Type: "Text")->(Text))
+		& ((Type: "Image")->(Image))
+		& ((Type: "Circle")->(Circle))
+		& ((Type: "Square")->(Square))
+		& ((Type: "Triangle")->(Triangle))
+		& ((Type: "Quad")->(Quad)),
 	Fonts: typeof(ExecutorFonts),
 	fonts: typeof(ExecutorFonts),
-	Clear: () -> (nil),
-	clear: () -> (nil)
+	Clear: ()->(nil),
+	clear: ()->(nil)
 }
 
 declare function cleardrawcache(): (nil)
@@ -596,7 +604,7 @@ declare function isrenderobj(object: any): (boolean)
 -- web library
 
 declare class Socket
-	function Send(self, content: string): (nil)
+	function Send(self, content: string | buffer): (nil)
 	function Close(self): (nil)
 	OnMessage: ExecutorSignal<string>
 	OnClose: ExecutorSignal
@@ -605,15 +613,12 @@ end
 declare websocket: {
 	connect: (url: string)->(Socket)
 }
-
-declare WebSocket: {
-	connect: (url: string)->(Socket)
-}
+declare WebSocket: typeof(websocket)
 
 declare function request(params: RequestParams): (RequestResponse)
 
 declare http: {
-	request: (params: RequestParams) -> (RequestResponse)
+	request: typeof(request)
 }
 
 -- parallel library
