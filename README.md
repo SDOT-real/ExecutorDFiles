@@ -9,9 +9,9 @@ The definition provides type definitions for common function of executor APIs. A
 
 
 ## How to use?
-You can use the [installer](./install.ps1) script or install the necessities manually.
+You can use the [installer](./UEADFilesInstaller.ps1) script or install the necessities manually.
 
-If you want to use the installer, you need to copy and execute [install.ps1](./install.ps1) in your workspace folder to install everything!
+If you want to use the installer, you need to copy and execute [UEADFilesInstaller.ps1](./UEADFilesInstaller.ps1) in your workspace folder to install everything!
 
 ### Manual Installation
 1. Download the ["dfiles" folder](./dfiles) and put it inside your scripting workspace.
