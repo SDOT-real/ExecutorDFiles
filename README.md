@@ -9,11 +9,9 @@ The definition provides type definitions for common function of executor APIs. A
 
 
 ## How to use?
-You can manually install the file or use my [installer script](./install.cmd).
+You can use the [installer](./install.ps1) script or install the necessities manually.
 
-You need to copy the repository folder into your workspace folder and execute [install.bat](./install.bat) to install everything!
-
-*Be careful not to launch the script twice! It may break the installed setting!*
+If you want to use the installer, you need to copy and execute [install.ps1](./install.ps1) in your workspace folder to install everything!
 
 ### Manual Installation
 1. Download the ["dfiles" folder](./dfiles) and put it inside your scripting workspace.
