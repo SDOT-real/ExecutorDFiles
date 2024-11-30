@@ -29,7 +29,18 @@ export type saveinstanceOptions = {
 	MaxThreads: number?,
 	ShowStatus: boolean?,
 	IgnoreDefaultProps: boolean?,
-	IsolateStarterPlayer: boolean?
+	IsolateStarterPlayer: boolean?,
+
+	-- synv3 options
+	FileName: string?,
+	IgnoreArchivable: boolean?,
+	SavePlayerCharacters: boolean?,
+	SavePlayers: boolean?,
+	DisableCompression: boolean?,
+	DecompileJobless: boolean?,
+	SaveNonCreatable: boolean?,
+	CopyToClipboard: boolean?,
+	IgnoreList: {Instance}?,
 }
 export type getinfoReturn = {
 	name: string,
@@ -79,8 +90,8 @@ export type ToastNotificationOptions = {
 export type RequestParams = {
 	Url: string,
 	Method: "GET" | "POST" | "HEAD" | "DELETE" | "PUT",
-	Headers: {},
-	Cookies: {},
+	Headers: {}?,
+	Cookies: {}?,
 	Body: string?
 }
 export type RequestResponse = {
@@ -89,7 +100,7 @@ export type RequestResponse = {
 	StatusMessage: string,
 	Headers: {},
 	Cookies: {},
-	Body: string?
+	Body: string
 }
 
 type metamethod = "__iter" | "__index" | "__newindex" | "__call" | "__call" | "__concat" | "__unm" | "__add" | "__sub" | "__mul" | "__div" | "__idiv" | "__mod" | "__pow" | "__tostring" | "__metatable" | "__lt" | "__le" | "__eq" | "__mode" | "__len" | "__namecall" | "__type"
@@ -220,6 +231,7 @@ declare function rconsoleclear(): (nil)
 declare function rconsolename(title: string): (nil)
 declare function rconsoleinput(): (string)
 declare function rconsoleclose(): (nil)
+declare rconsoledestroy: typeof(rconsoleclose)
 
 
 -- environment functions
@@ -228,11 +240,13 @@ declare function getgenv(): ({[any]: any})
 declare function getrenv(): ({[any]: any})
 declare function getsenv(script: LuaSourceContainer): ({[any]: any})
 declare function gettenv(thread: thread): ({[any]: any})
+declare function getsafeenv(env: {}): (boolean) -- weird function
 declare function getreg(): ({(number | thread | {} | ()->())})
 declare function getgc(includeTables: boolean?): ({()->() | {} | Object})
 declare function filtergc(type: ()->() | Object | {}, options: FilterGCOptions, returnOne: boolean?): (({} | any)?)
 
 declare function getinstances(): ({Instance})
+declare getinstancelist: typeof(getinstances)
 declare function getnilinstances(): ({Instance})
 declare function getscripts(): ({LuaSourceContainer})
 declare function getloadedmodules(): ({ModuleScript})
@@ -281,7 +295,10 @@ declare function hookproto(toHook: ProtoProxy, hook: ()->()): (nil)
 declare function hooksignal(signal: RBXScriptSignal, callback: ()->()): (nil)
 declare function hookmetamethod(object: Object | {}, metamethod: metamethod, hook: ()->(), argGuard: boolean?, filter: FilterBase?): (()->())
 
-declare function newcclosure<Func>(func: Func & ()->(), name: string?): (Func & ()->())
+declare function newcclosure<Closure>(closure: Closure & ()->(), name: string?): (Closure & ()->())
+declare function iscustomcclosure(closure: ()->()): (boolean)
+declare function islclosure(closure: ()->() | ProtoProxy): (boolean)
+declare function get_wrapped_original<Closure>(closure: Closure & ()->()): (Closure & ()->())
 
 
 -- oth library
@@ -318,6 +335,7 @@ declare function iskeytoggled(keycode: number): (boolean)
 
 declare function unlockmodulescript(module: ModuleScript): (nil)
 declare function setclipboard(content: string): (nil)
+declare setrbxclipboard: typeof(setclipboard)
 declare function setfflag(fflag: string, value: any): (nil)
 declare function gethui(): (BasePlayerGui)
 declare function toast_notification(options: ToastNotificationOptions): (nil)
@@ -328,12 +346,15 @@ declare function setnamecallmethod(): (nil)
 declare function trampoline_call(target: ()->(), call_stack: TrampolineCallStack, thread_options: TrampolineThreadOptions, ...: any): (boolean, ...any)
 
 declare function identifyexecutor(): (string, string)
+declare getexecutorname: typeof(identifyexecutor)
+declare function gethwid(): (string)
 declare function getthreadidentity(): (number)
 declare function setthreadidentity(identity: number): (number)
+declare function getfpscap(): (number)
 declare function setfpscap(cap: number): (nil)
 
-declare function saveinstance(object: Instance, filePath: string, options: saveinstanceOptions): (boolean)
-declare function saveplace(options: saveinstanceOptions): (boolean)
+declare function saveinstance(object: Instance | {Instance}, filePath: string, options: saveinstanceOptions): (boolean)
+declare function saveplace(filePath: string, options: saveinstanceOptions): (boolean)
 
 declare function messagebox(text: string, title: string, flag: number): (number)
 declare function setwindowtitle(title: string): (nil)
@@ -354,8 +375,16 @@ declare getcallbackmember: typeof(getcallbackvalue)
 declare function getrendersteppedlist(detailed: boolean?): ({[string]: ()->()} | {Function: ()->(), Name: string, Priority: number})
 
 declare function getpcd(object: TriangleMeshPart): (string, string)
+declare getpcdprop: typeof(getpcd)
+declare function getbspval(instance: Instance, property: string, base64: boolean?): (string)
+declare function getunionassetid(instance: UnionOperation): (string)
 declare function newtable(narray: number, nhash: number): ({})
 declare function geteventmember(object: Object, eventName: string): (RBXScriptSignal)
+
+
+-- thread functions
+
+declare function getallthreads(): ({thread})
 
 
 -- script functions
@@ -365,19 +394,19 @@ declare function checkcaller(): (boolean)
 
 declare function isexecutorclosure(closure: ()->() | ProtoProxy): (boolean)
 declare function isexecutorthread(thread: thread): (boolean)
-declare function islclosure(closure: ()->() | ProtoProxy): (boolean)
 declare function getcallingscript(): (LuaSourceContainer?)
 
 declare function getscriptthread(script: LuaSourceContainer): (thread)
 declare function getscriptclosure(script: LuaSourceContainer): (()->())
+declare getscriptfunction: typeof(getscriptclosure)
 declare function getscripthash(script: LuaSourceContainer): (string)
 declare function getscriptbytecode(script: LuaSourceContainer): (string)
 declare function getscriptname(script: LuaSourceContainer): (string)
 
 declare function getfunctionhash(target: ()->() | ProtoProxy): (string)
 declare function getfunctionbytecode(target: ()->() | ProtoProxy): (string)
-
-declare function decompile(target: LuaSourceContainer): (string)
+declare function dumpstring(target: LuaSourceContainer | ()->() | ProtoProxy): (string)
+declare function decompile(target: LuaSourceContainer | ()->() | ProtoProxy): (string)
 
 
 -- table functions 
@@ -386,6 +415,8 @@ declare function getrawmetatable(getFrom: {} | Object): ({})
 declare function setrawmetatable(target: {} | Object, metatable: {}): (nil)
 declare function setreadonly(table: {}, isReadonly: boolean): (nil)
 declare function isreadonly(table: {}): (boolean)
+declare function isuntouched(table: {}): (boolean)
+declare function setuntouched(table: {}, isTouched: boolean): (nil)
 
 
 -- signal functions
@@ -422,7 +453,7 @@ declare cache: {
 	invalidate: (target: Instance)->(nil),
 	iscached: (target: Instance)->(boolean)
 }
-declare function cloneref(toClone: Object): (Object)
+declare function cloneref<Cloned>(toClone: Object & Cloned): (Object & Cloned)
 declare function compareinstances(compareTo: Object, compare: Object): (boolean)
 
 
@@ -430,7 +461,11 @@ declare function compareinstances(compareTo: Object, compare: Object): (boolean)
 
 declare base64: {
 	encode: (data: string)->(string),
-	decode: (data: string)->(string)
+	decode: (data: string)->(string),
+}
+declare hex: {
+	encode: (data: string)->(string),
+	decode: (data: string)->(string),
 }
 
 declare crypt: {
@@ -439,7 +474,8 @@ declare crypt: {
 	hash: (data: string)->(string),
 	derive: (value: string, length: number)->(string),
 	random: (size: number)->(string),
-	base64: typeof(base64)
+	base64: typeof(base64),
+	hex: typeof(hex),
 }
 
 
@@ -485,7 +521,8 @@ declare debug: {
 	getregistry: typeof(getreg),
 	getinfo: (closure: ()->())->(getinfoReturn),
 	validlevel: (level: number, thread: thread?)->(boolean),
-	getcallstack: (thread: thread?)->({()->()})
+	getcallstack: (thread: thread?)->({()->()}),
+	setname: (target: ()->() | ProtoProxy)->(nil)
 } & typeof(debug)
 
 
