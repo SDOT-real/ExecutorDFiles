@@ -513,7 +513,6 @@ declare debug: {
 	setupvalue: (target: ()->() | number, index: number, value: any)->(),
 	getprotos: (target: ()->() | number | ProtoProxy)->({ProtoProxy}),
 	getproto: ((target: ()->() | number | ProtoProxy, index: number, getFromGc: true)->({()->()})) & ((target: ()->() | number | ProtoProxy, index: number, getFromGc: false?)->(ProtoProxy)),
-	setproto: (target: ()->() | number | ProtoProxy, index: number, replacement: ()->())->(nil),
 	getstack: (index: number)->({any}),
 	setstack: (level: number, index: number, value: any)->(nil),
 	getmetatable: typeof(getrawmetatable),
