@@ -139,11 +139,11 @@ end
 declare ExecutorSignal: {
 	new: ()->(ExecutorSignal)
 }
-export type ExecutorSignal<T... = ...any> = {
-	Connect: (self: ExecutorSignal<T...>, func: (T...)->())->(ExecutorConnection),
-	Wait: (self: ExecutorSignal<T...>)->(T...),
-	Fire: (self: ExecutorSignal<T...>, T...)->(nil)
-}
+declare class ExecutorSignal
+	function Connect(self, func: ()->()): (ExecutorConnection)
+	function Wait(self): (...any)
+	function Fire(self, ...: any): (nil)
+end
 
 
 -- filters
@@ -513,7 +513,6 @@ declare debug: {
 	setupvalue: (target: ()->() | number, index: number, value: any)->(),
 	getprotos: (target: ()->() | number | ProtoProxy)->({ProtoProxy}),
 	getproto: ((target: ()->() | number | ProtoProxy, index: number, getFromGc: true)->({()->()})) & ((target: ()->() | number | ProtoProxy, index: number, getFromGc: false?)->(ProtoProxy)),
-	setproto: (target: ()->() | number | ProtoProxy, index: number, replacement: ()->())->(nil),
 	getstack: (index: number)->({any}),
 	setstack: (level: number, index: number, value: any)->(nil),
 	getmetatable: typeof(getrawmetatable),
@@ -643,7 +642,7 @@ declare function isrenderobj(object: any): (boolean)
 declare class Socket
 	function Send(self, content: string | buffer): (nil)
 	function Close(self): (nil)
-	OnMessage: ExecutorSignal<string>
+	OnMessage: ExecutorSignal
 	OnClose: ExecutorSignal
 end
 
