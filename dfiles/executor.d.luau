@@ -253,9 +253,9 @@ declare function getloadedmodules(): ({ModuleScript})
 declare function fireclickdetector(clickDetector: ClickDetector): (nil)
 declare function fireproximityprompt(proximityPrompt: ProximityPrompt): (nil)
 declare function firetouchinterest(toTouch: BasePart, toucher: BasePart, touching: number?): (nil)
-declare function setscriptable(object: Object, property: string, isScriptable: boolean): (boolean)
-declare function gethiddenproperty(object: Object, property: string): (any)
-declare function sethiddenproperty(object: Object, property: string, value: any): (nil)
+declare function setscriptable(object: Instance, property: string, isScriptable: boolean): (boolean)
+declare function gethiddenproperty(object: Instance, property: string): (any)
+declare function sethiddenproperty(object: Instance, property: string, value: any): (nil)
 
 
 -- file functions
@@ -367,10 +367,10 @@ declare function clear_teleport_queue(): (nil)
 
 -- reflection functions
 
-declare function getproperties(object: Object): ({[string]: any})
-declare function gethiddenproperties(object: Object): ({[string]: any}) 
+declare function getproperties(object: Instance): ({[string]: any})
+declare function gethiddenproperties(object: Instance): ({[string]: any}) 
 	
-declare function getcallbackvalue(object: Object, property: string): (()->())
+declare function getcallbackvalue(object: Instance, property: string): (()->())
 declare getcallbackmember: typeof(getcallbackvalue)
 declare function getrendersteppedlist(detailed: boolean?): ({[string]: ()->()} | {Function: ()->(), Name: string, Priority: number})
 
@@ -379,7 +379,7 @@ declare getpcdprop: typeof(getpcd)
 declare function getbspval(instance: Instance, property: string, base64: boolean?): (string)
 declare function getunionassetid(instance: UnionOperation): (string)
 declare function newtable(narray: number, nhash: number): ({})
-declare function geteventmember(object: Object, eventName: string): (RBXScriptSignal)
+declare function geteventmember(object: Instance, eventName: string): (RBXScriptSignal)
 
 
 -- thread functions
@@ -453,8 +453,8 @@ declare cache: {
 	invalidate: (target: Instance)->(nil),
 	iscached: (target: Instance)->(boolean)
 }
-declare function cloneref<Cloned>(toClone: Object & Cloned): (Object & Cloned)
-declare function compareinstances(compareTo: Object, compare: Object): (boolean)
+declare function cloneref<Cloned>(toClone: Instance & Cloned): (Instance & Cloned)
+declare function compareinstances(compareTo: Instance, compare: Instance): (boolean)
 
 
 -- crypt library
