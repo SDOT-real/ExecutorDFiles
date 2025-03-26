@@ -4,7 +4,7 @@
 
 -- Universal Executor API Definition File
 -- Written by S.DOT
--- Version 1.1
+-- Version 1.2
 
 -- stolen from the Wave documentation, will add more functions from other executors
 -- now also stolen from the Syn V3 docs
@@ -227,6 +227,7 @@ declare function rconsoleprint(text: string): (nil)
 declare function rconsolewarn(text: string): (nil)
 declare function rconsoleinfo(text: string): (nil)
 declare function rconsoleerr(text: string): (nil)
+declare rconsoleerror: typeof(rconsoleerr)
 declare function rconsoleclear(): (nil)
 declare function rconsolename(title: string): (nil)
 declare function rconsoleinput(): (string)
